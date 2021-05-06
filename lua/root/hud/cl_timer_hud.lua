@@ -22,6 +22,11 @@ net.Receive("timeplayed", function(len, ply)
 
 end)
 
+timer.Create("client_timer", 1, 0, function() 
+    time = time + 1
+    print("client time " .. time)
+end)
+
 hook.Add("HUDPaint", "draw_timer_hud", function()
     draw.RoundedBox(0, x, margin, myConfig.scrw - x - margin, 40, Color(70,70,70))
 

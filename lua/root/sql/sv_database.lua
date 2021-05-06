@@ -1,7 +1,13 @@
+local MySql = MySql or {} // create a class
+
+function getMySqlInstance() // I think it will create a singleton
+    return MySql or nil
+end
+
 local table = table or ""
 
 // create an sql table
-function createTable(tableName)
+function MySql.createTable(tableName)
     if sql.TableExists(tableName) then 
         table = tableName
         print("TABLE " .. tableName .. " ALREADY EXISTS")
@@ -18,32 +24,32 @@ function addPlayer(ply)
     sql.Query("INSERT INTO " .. table .. " ( SteamID, time ) VALUES( " .. steamID .. "," .. 0 .. ")")    
 end
 
-function updatePlayer(ply, time)
+function MySql.updatePlayer(ply, time)
     local steamID = sql.SQLStr(ply:SteamID())
 
     sql.Query("UPDATE " .. table .. " SET time = " .. (time or 0) .. " WHERE SteamID = " .. steamID .. ";")
 end
 
 
-function playerExists(ply) 
+function MySql.playerExists(ply) 
     local steamID = sql.SQLStr(ply:SteamID())
     local query = sql.QueryValue("SELECT EXISTS( SELECT 1 FROM " .. table .. " WHERE SteamID = " .. steamID .. " );")
 
     return tobool(query)
 end
 
-function getPlayerTime(ply) 
+function MySql.getPlayerTime(ply) 
     local steamID = sql.SQLStr(ply:SteamID())
     local query = sql.Query("SELECT time FROM " .. table .. " WHERE SteamID = " .. steamID .. ";")
 
     return tonumber(query[1]["time"] or 0)
 end
 
-function removePlayer(ply) 
+function MySql.removePlayer(ply) 
     local steamID = sql.SQLStr(ply:SteamID())
     local query = sql.Query("DELETE FROM " .. table .. " WHERE SteamID = " .. steamID .. ";")
 
     return query
 end
 
-createTable("twog_table")
+MySql.createTable("twog_table")
